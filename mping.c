@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
   int i=0;
   int j=0;
   int intMax=0;
+  int intCount[16]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   char strCmd[BUFSIZE];
   char strBuf[BUFSIZE];
   char strTemp[BUFSIZE];
@@ -19,13 +20,13 @@ int main(int argc, char *argv[])
   time_t t;
 
   if( argc < 2 ) {
-    printf( " Syntax: mping <IPaddress1> <IPaddress2> ..\n version 1.0\n" );
+    printf( " version 1.1\n Syntax: mping <IPaddress1> <IPaddress2> ..\n" );
     exit(-1);
   }
 
   intMax = argc - 1;
   printf(" -----------------------------------------------\n");
-  printf(" A mping targets %d IP address: [msec]\n", intMax);
+  printf(" A mping targets %d IP address:\n", intMax);
   printf(" -----------------------------------------------\n");
 
 
@@ -38,11 +39,15 @@ int main(int argc, char *argv[])
         printf("%16s", argv[i+1]);
       }
       printf("\n");
+      for( i = 0; i < intMax; i++ ) {
+        printf("%16d", intCount[i+1] );
+      }
+      printf( " <- NG out of %d\n", intCount[0] );
     }
     if(j++ > 10) j=0;
 
     /* To throw ping */
-    strcpy( strResult, "" );
+    intCount[0]++;
     for ( i = 0; i < intMax; i++ ) {
 
       snprintf(strCmd, BUFSIZE, "ping -n 1 %s", argv[i+1]);
@@ -73,6 +78,7 @@ int main(int argc, char *argv[])
         }
       } else {
         printf( "      *** NG ***" );
+        intCount[i+1]++;
       }
     }
     printf("\n");
